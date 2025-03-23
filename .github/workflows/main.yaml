@@ -35,6 +35,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Check Java version
+        run: |
+          java -version
+          mvn --version
+          echo "JAVA_HOME=$JAVA_HOME"
+          echo "$PATH"
+
       - name: Lint with Checkstyle
         run: |
           mvn checkstyle:check
