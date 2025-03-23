@@ -28,7 +28,10 @@ jobs:
       - name: Lint with Checkstyle
         run: |
           pwd
-          cat *
+          ls
+          cd ../
+          pwd 
+          ls
           mvn checkstyle:check
 
   test:
