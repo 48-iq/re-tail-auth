@@ -6,4 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 
 class AuthServiceApplicationTests {
+    @Test
+    void helloWorld() {
+        System.out.println("Hello world");
+        Assertions.assertEquals(2 + 2, 4);
+    }
 }
