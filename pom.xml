@@ -136,7 +136,6 @@
 				<version>3.6.0</version>
 				<configuration>
 					<consoleOutput>true</consoleOutput>
-					<encoding>UTF-8</encoding>
 					<configLocation>google_checks.xml</configLocation>
 				</configuration>
 			</plugin>

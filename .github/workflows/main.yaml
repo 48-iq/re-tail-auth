@@ -27,6 +27,8 @@ jobs:
     steps:
       - name: Lint with Checkstyle
         run: |
+          pwd
+          cat *
           mvn checkstyle:check
 
   test:
