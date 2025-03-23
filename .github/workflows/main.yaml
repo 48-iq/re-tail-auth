@@ -89,7 +89,7 @@ jobs:
           mvn clean package -DskipTests
 
   push_to_docker:
-    name: Push to Docker Hub
+    name: Push to Github Packages
     runs-on: ubuntu-latest
     needs:
       - lint
