@@ -30,11 +30,6 @@ jobs:
 
       - name: Lint with Checkstyle
         run: |
-          pwd
-          ls
-          cd ../
-          pwd 
-          ls
           mvn checkstyle:check
 
   test:
