@@ -24,7 +24,7 @@ jobs:
       - name: Check Java version
         run: |
           java -version
-          echo %JAVA_HOME%
+          echo $JAVA_HOME
 
   lint:
     runs-on: ubuntu-latest
