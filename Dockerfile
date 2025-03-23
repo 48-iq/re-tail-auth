@@ -1,9 +1,11 @@
-FROM maven:3.9.9-eclipse-temurin-21-jammy AS build
+FROM eclipse-temurin:21-jdk-jammy AS build
 WORKDIR /app
+COPY .mvn .mvn
+COPY mvnw .
 COPY ./pom.xml ./pom.xml
-RUN mvn dependency:resolve
+RUN ./mvnw dependency:resolve
 COPY ./src ./src
-RUN mvn package -DskipTests
+RUN ./mvnw package -DskipTests
 
 FROM eclipse-temurin:21-jre-jammy
 COPY --from=build /app/target/*.jar ./app.jar

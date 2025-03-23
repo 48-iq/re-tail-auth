@@ -25,6 +25,8 @@ jobs:
         run: |
           java -version
           mvn --version
+          echo "JAVA_HOME=$JAVA_HOME"
+          echo "$PATH"
 
   lint:
     runs-on: ubuntu-latest
