@@ -17,7 +17,9 @@ jobs:
           java-version: 21
 
       - name: Setup Maven
-        uses: s4u/setup-maven-action@3.8.6
+        uses: stCarolas/setup-maven@v5
+        with:
+          maven-version: 3.8.6
 
   lint:
     runs-on: ubuntu-latest
