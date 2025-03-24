@@ -57,5 +57,5 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:${{ steps.meta.outputs.tags }}
-            ghcr.io/${{ github.event.repository.name }}:${{ steps.meta.outputs.labels }}
+            ${{ steps.meta.outputs.tags }}
+            ${{ steps.meta.outputs.labels }}
