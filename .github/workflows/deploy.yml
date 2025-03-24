@@ -50,6 +50,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Debug metadata
+        run: |
+          echo "Tags: ${{ steps.metadata.outputs.tags }}"
+          echo "Labels: ${{ steps.metadata.outputs.labels }}"
+
+
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
