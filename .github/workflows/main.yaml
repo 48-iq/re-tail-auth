@@ -84,6 +84,7 @@ jobs:
           echo "JAVA_HOME=$JAVA_HOME"
           echo "$PATH"
 
+
       - name: Build with Maven
         run: |
           mvn clean package -DskipTests
