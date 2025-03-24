@@ -19,8 +19,8 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}
           tags: |
-            type=raw,value=latest
-            type=ref,event=tag,enable=${{github.ref == format('refs/heads/{0}', 'main')}}
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=ref,event=tag
 
       - name: setup java
         uses: actions/setup-java@v3
@@ -50,7 +50,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Debug metadata
+      - name: Meta info
         run: |
           echo "Tags: ${{ steps.meta.outputs.tags }}"
           echo "Labels: ${{ steps.meta.outputs.labels }}"
@@ -64,4 +64,5 @@ jobs:
           push: true
           tags: |
             ${{ steps.meta.outputs.tags }}
+          labels: |
             ${{ steps.meta.outputs.labels }}
