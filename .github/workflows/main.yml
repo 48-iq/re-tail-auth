@@ -58,7 +58,6 @@ jobs:
 
       - name: Run tests
         run: |
-          sleep 40
           mvn clean test
 
   build:
@@ -113,4 +112,5 @@ jobs:
           docker run --name app -p 8080:8080 -d app -e POSTGRES_URI=jdbc:postgresql://localhost:5432/app -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres
       - name: Curl actuator
         run: |
+          sleep 40
           curl -X GET http://localhost:8080/actuator/health
