@@ -58,6 +58,7 @@ jobs:
 
       - name: Run tests
         run: |
+          sleep 40
           mvn clean test
 
   build:
