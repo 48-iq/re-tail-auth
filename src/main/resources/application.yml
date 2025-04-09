@@ -23,6 +23,8 @@ eureka:
 
 app:
   jwt:
+    subject: ${JWT_SUBJECT}
+    issuer: ${JWT_ISSUER}
     accessDuration: ${JWT_ACCESS_DURATION}
     accessSecret: ${JWT_ACCESS_SECRET}
     refreshDuration: ${JWT_REFRESH_DURATION}

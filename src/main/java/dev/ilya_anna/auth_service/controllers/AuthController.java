@@ -1,11 +1,13 @@
 package dev.ilya_anna.auth_service.controllers;
 
+import dev.ilya_anna.auth_service.dto.ChangePasswordDto;
 import dev.ilya_anna.auth_service.dto.JwtDto;
 import dev.ilya_anna.auth_service.dto.SignInDto;
 import dev.ilya_anna.auth_service.dto.SignUpDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +24,11 @@ public class AuthController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<JwtDto> signUp(SignUpDto signUpDto) {
+        return null;
+    }
+
+    @PutMapping("/change-password/{userId}")
+    public ResponseEntity<Void> changePassword(ChangePasswordDto changePasswordDto) {
         return null;
     }
 }
