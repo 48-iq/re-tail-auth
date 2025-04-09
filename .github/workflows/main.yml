@@ -106,6 +106,9 @@ jobs:
         run: |
           mvn package -DskipTests
           docker build -t app .
+
+      - name: Run app
+        run: |
           docker run --name app -p 8080:8080 -d app -e POSTGRES_URI=jdbc:postgresql://localhost:5432/app -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres
       - name: Curl actuator
         run: |
