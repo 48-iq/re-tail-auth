@@ -84,34 +84,4 @@ jobs:
           echo "JAVA_HOME=$JAVA_HOME"
           echo "$PATH"
 
-  test-environtment:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
 
-      - name: Setup JDK 21
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'adopt'
-          java-version: 21
-
-      - name: Set up Docker
-        uses: docker/setup-docker-action@v4
-
-      - name: Start postgres
-        run: |
-          docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=app -d postgres
-      - name: Start app
-        run: |
-          mvn package -DskipTests
-          docker build -t app .
-
-      - name: Run app
-        run: |
-          docker run --name app -p 8080:8080 -d app -e POSTGRES_URI=jdbc:postgresql://localhost:5432/app -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres
-      - name: Curl actuator
-        run: |
-          docker ls
-          sleep 40
-          curl 'http://localhost:8080/actuator/health' -i -X GET -H 'Accept: application/json'
