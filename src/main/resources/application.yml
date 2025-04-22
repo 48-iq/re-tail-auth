@@ -13,6 +13,10 @@ spring:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}
       password: ${REDIS_PASSWORD}
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
 
 eureka:
   client:
@@ -23,7 +27,13 @@ eureka:
 
 app:
   jwt:
-    accessDuration: ${JWT_ACCESS_DURATION}
-    accessSecret: ${JWT_ACCESS_SECRET}
-    refreshDuration: ${JWT_REFRESH_DURATION}
-    refreshSecret: ${JWT_REFRESH_SECRET}
+    subject: ${JWT_SUBJECT}
+    issuer: ${JWT_ISSUER}
+    access:
+      duration: ${JWT_ACCESS_DURATION}
+      secret: ${JWT_ACCESS_SECRET}
+    refresh:
+      duration: ${JWT_REFRESH_DURATION}
+      secret: ${JWT_REFRESH_SECRET}
+  uuid:
+    seed: ${UUID_SEED}

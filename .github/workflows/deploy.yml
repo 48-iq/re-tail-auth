@@ -61,7 +61,6 @@ jobs:
           echo "Tags: ${{ steps.meta.outputs.tags }}"
           echo "Labels: ${{ steps.meta.outputs.labels }}"
 
-
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
@@ -72,3 +71,5 @@ jobs:
             ${{ steps.meta.outputs.tags }}
           labels: |
             ${{ steps.meta.outputs.labels }}
+
+  deploy:

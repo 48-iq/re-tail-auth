@@ -85,6 +85,3 @@ jobs:
           echo "$PATH"
 
 
-      - name: Build with Maven
-        run: |
-          mvn clean package -DskipTests
