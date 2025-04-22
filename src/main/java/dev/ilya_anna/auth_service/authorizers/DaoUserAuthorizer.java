@@ -1,8 +1,6 @@
 package dev.ilya_anna.auth_service.authorizers;
 
-import dev.ilya_anna.auth_service.repositories.UserRepository;
 import dev.ilya_anna.auth_service.security.DaoUserDetails;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.core.Authentication;
@@ -19,8 +17,11 @@ public class DaoUserAuthorizer implements AuthorizationManager<RequestAuthorizat
     public AuthorizationDecision check(Supplier<Authentication> authenticationSupplier,
                                        RequestAuthorizationContext authorizationContext) {
         Authentication authentication = authenticationSupplier.get();
+        //get request sender
         DaoUserDetails userDetails = (DaoUserDetails) authentication.getPrincipal();
+        //get user id from authorization context
         String userId = authorizationContext.getVariables().get("userId");
+        //authorize only if request sender id equals user id
         String requestSenderId = userDetails.getUser().getId();
         return new AuthorizationDecision(userId.equals(requestSenderId));
     }

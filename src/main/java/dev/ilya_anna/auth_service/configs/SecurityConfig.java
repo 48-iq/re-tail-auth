@@ -1,11 +1,11 @@
 package dev.ilya_anna.auth_service.configs;
 
 import dev.ilya_anna.auth_service.authorizers.DaoUserAuthorizer;
+import dev.ilya_anna.auth_service.security.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,19 +23,21 @@ public class SecurityConfig {
     @Autowired
     private DaoUserAuthorizer daoUserAuthorizer;
 
+    @Autowired
+    private JwtFilter jwtFilter;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
+                        .requestMatchers("/api/v1/auth/sign-out").authenticated()
                         .requestMatchers("/api/v1/auth/change-password/{userId}").access(daoUserAuthorizer)
-                        .requestMatchers("/api/v1/auth/delete-account/{userId}").access(daoUserAuthorizer)
                         .anyRequest().permitAll()
                 )
                 .anonymous(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-//              TODO create jwt filter (may be in
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

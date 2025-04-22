@@ -15,4 +15,5 @@ import java.util.List;
 public class Role {
     @Id
     private String name;
+
 }
