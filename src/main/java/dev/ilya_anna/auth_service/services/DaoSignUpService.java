@@ -45,7 +45,16 @@ public class DaoSignUpService implements SignUpService {
 
     @Autowired
     private CreateUserTransactionRepository createUserTransactionRepository;
-
+    
+    /**
+     * Sign up user with given user data, and return jwt tokens.
+     * Send user created event to broker, for create user in other services.
+     * If user with given username exists, throw UserAlreadyExistsException.
+     * 
+     * @param signUpDto contains user data
+     * @return jwt tokens for access and refresh
+     * @throws UserAlreadyExistsException if user with given username already exists
+     */
     @Override
     public JwtDto signUp(@Valid SignUpDto signUpDto) {
 

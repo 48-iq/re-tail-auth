@@ -3,7 +3,8 @@ package dev.ilya_anna.auth_service.validators;
 import dev.ilya_anna.auth_service.dto.ChangePasswordDto;
 import dev.ilya_anna.auth_service.entities.User;
 import dev.ilya_anna.auth_service.security.DaoUserDetails;
-import jakarta.annotation.Nonnull;
+
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -14,12 +15,12 @@ import org.springframework.validation.Validator;
 public class DaoChangePasswordDtoValidator implements Validator {
 
     @Override
-    public boolean supports(@Nonnull Class<?> clazz) {
+    public boolean supports(@NonNull Class<?> clazz) {
         return ChangePasswordDto.class.equals(clazz);
     }
 
     @Override
-    public void validate(@Nonnull Object target, @Nonnull Errors errors) {
+    public void validate(@NonNull Object target, @NonNull Errors errors) {
         ChangePasswordDto changePasswordDto = (ChangePasswordDto) target;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         DaoUserDetails daoUserDetails = (DaoUserDetails) authentication.getPrincipal();

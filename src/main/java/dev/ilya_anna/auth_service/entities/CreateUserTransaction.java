@@ -2,15 +2,18 @@ package dev.ilya_anna.auth_service.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
+@Table(name = "create_user_transactions")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
 public class CreateUserTransaction {
+
     @Id
     private String id;
 

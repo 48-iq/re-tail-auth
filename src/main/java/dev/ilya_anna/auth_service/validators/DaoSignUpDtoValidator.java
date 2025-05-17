@@ -2,8 +2,8 @@ package dev.ilya_anna.auth_service.validators;
 
 import dev.ilya_anna.auth_service.dto.SignUpDto;
 import dev.ilya_anna.auth_service.repositories.UserRepository;
-import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -14,12 +14,12 @@ public class DaoSignUpDtoValidator implements Validator {
     private UserRepository userRepository;
 
     @Override
-    public boolean supports(@Nonnull Class<?> clazz) {
+    public boolean supports(@NonNull Class<?> clazz) {
         return SignUpDto.class.equals(clazz);
     }
 
     @Override
-    public void validate(@Nonnull Object target, @Nonnull Errors errors) {
+    public void validate(@NonNull Object target, @NonNull Errors errors) {
 
         SignUpDto signUpDto = (SignUpDto) target;
         String username = signUpDto.getUsername();
