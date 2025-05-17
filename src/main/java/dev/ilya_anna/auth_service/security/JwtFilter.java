@@ -8,12 +8,12 @@ import dev.ilya_anna.auth_service.exceptions.UserNotFoundException;
 import dev.ilya_anna.auth_service.repositories.UserRepository;
 import dev.ilya_anna.auth_service.services.JwtService;
 import dev.ilya_anna.auth_service.services.SignOutService;
-import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,9 +38,9 @@ public class JwtFilter extends OncePerRequestFilter {
     private SignOutService signOutService;
 
     @Override
-    protected void doFilterInternal(@Nonnull HttpServletRequest request,
-                                    @Nonnull HttpServletResponse response,
-                                    @Nonnull FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
         //get authorization header
         String authorizationHeader = request.getHeader("Authorization");
         try {
@@ -63,10 +63,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 //add user to security context
                 UserDetails userDetails = new DaoUserDetails(user);
-                Authentication authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities()
-                );
-                authentication.setAuthenticated(true);
+                Authentication authentication = UsernamePasswordAuthenticationToken
+                    .authenticated(userDetails, null, userDetails.getAuthorities());
+                
                 if (SecurityContextHolder.getContext().getAuthentication() == null ||
                         !SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
                     SecurityContextHolder.getContext().setAuthentication(authentication);

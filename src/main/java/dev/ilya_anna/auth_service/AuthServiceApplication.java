@@ -4,9 +4,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
-import java.nio.charset.StandardCharsets;
-import java.util.UUID;
-
 @EnableDiscoveryClient
 @SpringBootApplication
 public class AuthServiceApplication {
