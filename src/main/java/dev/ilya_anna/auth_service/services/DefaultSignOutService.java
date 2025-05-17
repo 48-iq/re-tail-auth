@@ -32,6 +32,14 @@ public class DefaultSignOutService implements SignOutService{
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Validates sign out mark for given user id and time. If mark exists and it's sign out time is after given time
+     * then IllegalArgumentException is thrown with message "authentication expired"
+     *
+     * @param userId user id
+     * @param time   time to compare with sign out time
+     * @throws IllegalArgumentException if authentication expired
+     */
     @Override
     public void validateSignOutMark(String userId, LocalDateTime time) {
         Optional<SignOutMark> signOutMarkOptional = signOutMarkRepository.findById(userId);
@@ -44,6 +52,14 @@ public class DefaultSignOutService implements SignOutService{
         }
     }
 
+    /**
+     * Signs out user with given username.
+     * If user is already signed out, then his sign out mark is deleted and new one is created.
+     * Then user sign out event is sent to broker for sign out user in other services.
+     *
+     * @param username user name
+     * @throws UserNotFoundException if user with given username not found
+     */
     @Override
     public void signOut(String username) {
 

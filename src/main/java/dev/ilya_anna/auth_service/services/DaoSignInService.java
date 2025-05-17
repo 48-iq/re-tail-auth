@@ -2,7 +2,6 @@ package dev.ilya_anna.auth_service.services;
 
 import dev.ilya_anna.auth_service.dto.JwtDto;
 import dev.ilya_anna.auth_service.dto.SignInDto;
-import dev.ilya_anna.auth_service.repositories.UserRepository;
 import dev.ilya_anna.auth_service.security.DaoUserDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +17,15 @@ public class DaoSignInService implements SignInService {
     private AuthenticationManager daoAuthenticationManager;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private JwtService jwtService;
 
+    /**
+     * Authenticates a user using the provided sign-in credentials and returns a JWT.
+     * 
+     * @param signInDto the sign-in credentials containing username and password
+     * @return a JwtDto containing access and refresh tokens for the authenticated user
+     * @throws AuthenticationException if the authentication fails
+     */
     @Override
     public JwtDto signIn(SignInDto signInDto) {
 

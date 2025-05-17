@@ -16,6 +16,18 @@ public class DefaultRefreshService implements RefreshService {
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Refreshes JWT tokens using the provided refresh token.
+     *
+     * This method validates the provided refresh token, retrieves the associated
+     * user, and generates new access and refresh tokens for the user.
+     *
+     * @param refreshToken the refresh token used to authenticate and refresh the user's session
+     * @return a JwtDto containing new access and refresh tokens
+     * @throws UserNotFoundException if the user associated with the refresh token is not found
+     * @throws JWTVerificationException if the refresh token is invalid
+     */
+
     @Override
     public JwtDto refresh(String refreshToken) {
 

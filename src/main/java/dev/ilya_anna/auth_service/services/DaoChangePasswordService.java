@@ -11,8 +11,6 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.Optional;
-
 @Validated
 @Service
 public class DaoChangePasswordService implements ChangePasswordService {
@@ -25,6 +23,13 @@ public class DaoChangePasswordService implements ChangePasswordService {
     @Autowired
     private SignOutService signOutService;
 
+    /**
+     * Change user password with old and new password add current jwt tokens to sign out list
+     *
+     * @param userId        user id (UUID)
+     * @param changePasswordDto contains old and new passwords
+     * @throws IllegalArgumentException if user with given id not found or old password is incorrect
+     */
     @Override
     public void changePassword(String userId, @Valid ChangePasswordDto changePasswordDto) {
 

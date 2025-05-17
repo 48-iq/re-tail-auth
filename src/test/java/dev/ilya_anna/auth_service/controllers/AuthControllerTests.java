@@ -1,13 +1,11 @@
-package dev.ilya_anna.auth_service;
+package dev.ilya_anna.auth_service.controllers;
 
+import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.stereotype.Service;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -17,7 +15,6 @@ import org.testcontainers.kafka.KafkaContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import com.redis.testcontainers.RedisContainer;
-
 
 @Testcontainers
 @SpringBootTest(
@@ -32,8 +29,8 @@ import com.redis.testcontainers.RedisContainer;
         "app.uuid.seed=auth_service"
     }
 )
-class AuthServiceApplicationTests {
- 
+public class AuthControllerTests {
+    
     @Container
     @ServiceConnection
     static KafkaContainer kafka = new KafkaContainer("apache/kafka-native:3.8.0");
@@ -75,6 +72,6 @@ class AuthServiceApplicationTests {
     }
 
     @Test
-    void  {
+    void contextLoads() {
     }
 }
