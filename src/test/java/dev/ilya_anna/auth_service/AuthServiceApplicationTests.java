@@ -75,6 +75,6 @@ class AuthServiceApplicationTests {
     }
 
     @Test
-    void  {
+    void contextLoads() {
     }
 }
