@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 @Data
@@ -19,6 +20,7 @@ public class UserCreatedEvent {
     private String nickname;
     private String phone;
     private String email;
+    private ZonedDateTime time;
 
     public static final String TOPIC = "user-created-events-topic";
 
@@ -30,7 +32,8 @@ public class UserCreatedEvent {
                 "surname", userCreatedEvent.getSurname(),
                 "nickname", userCreatedEvent.getNickname(),
                 "phone", userCreatedEvent.getPhone(),
-                "email", userCreatedEvent.getEmail()
+                "email", userCreatedEvent.getEmail(),
+                "time", userCreatedEvent.getTime().toString()
         );
     }
 
@@ -43,6 +46,7 @@ public class UserCreatedEvent {
                 .nickname((String) map.get("nickname"))
                 .phone((String) map.get("phone"))
                 .email((String) map.get("email"))
+                .time(ZonedDateTime.parse((String) map.get("time")))
                 .build();
     }
 }

@@ -14,6 +14,9 @@ import dev.ilya_anna.auth_service.validators.DaoSignUpDtoValidator;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+
+import java.time.ZonedDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -65,7 +68,6 @@ public class DaoSignUpService implements SignUpService {
             throw  new UserAlreadyExistsException("user with username" +
                     signUpDto.getUsername() + " already exists");
         }
-
         //create user
         User user = User.builder()
                 .id(uuidService.generate())
@@ -73,7 +75,6 @@ public class DaoSignUpService implements SignUpService {
                 .password(passwordEncoder.encode(signUpDto.getPassword()))
                 .roles(signUpDto.getRoles().stream().map(Role::new).toList())
                 .build();
-
         //create broker event
         UserCreatedEvent userCreatedEvent = UserCreatedEvent.builder()
                 .id(user.getId())
@@ -84,6 +85,7 @@ public class DaoSignUpService implements SignUpService {
                 .surname(signUpDto.getSurname())
                 .email(signUpDto.getEmail())
                 .phone(signUpDto.getPhone())
+                .time(ZonedDateTime.now())
                 .build();
 
         //create entity for outbox pattern
@@ -102,6 +104,7 @@ public class DaoSignUpService implements SignUpService {
                 .eventNickname(userCreatedEvent.getNickname())
                 .eventName(userCreatedEvent.getName())
                 .eventSurname(userCreatedEvent.getSurname())
+                .eventTime(userCreatedEvent.getTime())
                 .build();
 
         //save transaction for outbox pattern
