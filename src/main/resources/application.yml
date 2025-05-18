@@ -18,6 +18,14 @@ spring:
     hibernate:
       ddl-auto: validate
 
+  kafka:
+    bootstrap-servers: "kafka:9092"
+    consumer:
+      group-id: "auth-service"
+      value-deserializer: "org.springframework.kafka.support.serializer.JsonDeserializer"
+    producer:
+      value-serializer: "org.springframework.kafka.support.serializer.JsonSerializer"
+
 eureka:
   client:
     serviceUrl:

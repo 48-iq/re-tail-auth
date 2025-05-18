@@ -79,6 +79,7 @@ public class DaoSignUpService implements SignUpService {
                 .id(user.getId())
                 .userId(user.getId())
                 .email(signUpDto.getEmail())
+                .nickname(signUpDto.getNickname())
                 .name(signUpDto.getName())
                 .surname(signUpDto.getSurname())
                 .email(signUpDto.getEmail())
@@ -92,7 +93,9 @@ public class DaoSignUpService implements SignUpService {
                 .entityId(user.getId())
                 .entityUsername(user.getUsername())
                 .entityPassword(user.getPassword())
+            
                 //event fields
+                .eventId(userCreatedEvent.getId())
                 .eventUserId(userCreatedEvent.getId())
                 .eventEmail(userCreatedEvent.getEmail())
                 .eventPhone(userCreatedEvent.getPhone())
@@ -113,7 +116,10 @@ public class DaoSignUpService implements SignUpService {
 
 
         //generate jwt
-        return new JwtDto(jwtService.generateRefresh(user), jwtService.generateAccess(user));
+        return JwtDto.builder()
+            .refresh(jwtService.generateRefresh(user))
+            .access(jwtService.generateAccess(user))
+            .build();
     }
 
     @Transactional
