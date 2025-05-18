@@ -44,6 +44,7 @@ import com.redis.testcontainers.RedisContainer;
 import dev.ilya_anna.auth_service.dto.JwtDto;
 import dev.ilya_anna.auth_service.entities.Role;
 import dev.ilya_anna.auth_service.entities.User;
+import dev.ilya_anna.auth_service.events.UserCreatedEvent;
 import dev.ilya_anna.auth_service.repositories.CreateUserTransactionRepository;
 import dev.ilya_anna.auth_service.repositories.SignOutMarkRepository;
 import dev.ilya_anna.auth_service.repositories.UserRepository;
@@ -140,9 +141,6 @@ public class AuthControllerTests {
             return new TestConsumer();
         }
     }
-
-    @Autowired
-    private EmbeddedKafkaBroker embeddedKafkaBroker;
 
     @Autowired
     private UserRepository userRepository;
@@ -255,6 +253,38 @@ public class AuthControllerTests {
     }
 
     @Test
+    void signUp_SignInUser_WhenRegisterNewUser() {
+        given()
+            .contentType(ContentType.JSON)
+            .when()
+            .body(Map.of(
+                "username", "new_user",
+                "password", "new_UserPASSWORD#!",
+                "email", "test@mail.ru",
+                "phone", "+79999999999",
+                "nickname", "new_user_nickname",
+                "name", "Jhon",
+                "surname", "Doe",
+                "roles", List.of("ROLE_USER")
+            ))
+            .post("/sign-up")
+            .then()
+            .log().body()
+            .statusCode(200);
+        given()
+            .contentType(ContentType.JSON)
+            .when()
+            .body(Map.of(
+                "username", "new_user",
+                "password", "new_UserPASSWORD#!"
+            )).
+            post("/sign-in")
+            .then()
+            .log().body()
+            .statusCode(200);
+    }
+
+    @Test
     void signUp_SaveUserToDB_WhenRegisterNewUser() {
         given()
             .contentType(ContentType.JSON)
@@ -301,13 +331,15 @@ public class AuthControllerTests {
             .pollInterval(Duration.ofSeconds(3))
             .atMost(10, TimeUnit.SECONDS)
             .untilAsserted(() -> {
-                if (!testConsumer.getUserCreatedEventMessages().isEmpty()) 
+                if (!testConsumer.getUserCreatedEventMessages().isEmpty()) {
                     log.info("message: {}", testConsumer.getUserCreatedEventMessages().getLast());
+                    UserCreatedEvent userCreatedEvent = UserCreatedEvent.fromMap(testConsumer.getUserCreatedEventMessages().getLast());
+                    log.info("userCreatedEvent: {}", userCreatedEvent);
+                }
                 assertNotNull(testConsumer.getUserCreatedEventMessages().getLast());
+
                 testConsumer.clear();
             });
     }
-
-
     
 }

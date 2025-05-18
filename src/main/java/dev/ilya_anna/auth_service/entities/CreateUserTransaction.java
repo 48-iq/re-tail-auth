@@ -1,5 +1,7 @@
 package dev.ilya_anna.auth_service.entities;
 
+import java.time.ZonedDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -28,6 +30,6 @@ public class CreateUserTransaction {
     private String eventNickname;
     private String eventPhone;
     private String eventEmail;
-
+    private ZonedDateTime eventTime;
 
 }

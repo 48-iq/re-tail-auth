@@ -30,5 +30,6 @@ create table create_user_transactions (
   event_surname text not null,
   event_nickname text not null,
   event_phone text not null,
-  event_email text not null
+  event_email text not null,
+  event_time timestamp not null
 );
