@@ -43,7 +43,7 @@ public class DefaultJwtService implements JwtService{
         return JWT.create()
                 .withIssuer(issuer)
                 .withSubject(subject)
-                .withExpiresAt(ZonedDateTime.now().plusDays(refreshDuration).toInstant())
+                .withExpiresAt(ZonedDateTime.now().plusSeconds(refreshDuration).toInstant())
                 .withClaim("userId", user.getId())
                 .sign(Algorithm.HMAC256(refreshSecret));
     }
@@ -59,7 +59,7 @@ public class DefaultJwtService implements JwtService{
         return JWT.create()
                 .withIssuer(issuer)
                 .withSubject(subject)
-                .withExpiresAt(ZonedDateTime.now().plusDays(accessDuration).toInstant())
+                .withExpiresAt(ZonedDateTime.now().plusSeconds(accessDuration).toInstant())
                 .withClaim("userId", user.getId())
                 .withClaim("roles", user.getRoles().stream().map(Role::getName).toList())
                 .withClaim("username", user.getUsername())
@@ -95,7 +95,7 @@ public class DefaultJwtService implements JwtService{
      */
     @Override
     public DecodedJWT verifyRefreshToken(String token) throws JWTVerificationException {
-        JWTVerifier verifier = JWT.require(Algorithm.HMAC256(accessSecret))
+        JWTVerifier verifier = JWT.require(Algorithm.HMAC256(refreshSecret))
                 .withSubject(subject)
                 .withIssuer(issuer)
                 .withClaimPresence("userId")

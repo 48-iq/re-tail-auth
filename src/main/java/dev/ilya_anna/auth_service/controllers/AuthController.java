@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -51,13 +52,10 @@ public class AuthController {
     public ResponseEntity<JwtDto> signIn(@RequestBody SignInDto signInDto) {
         try {
             return ResponseEntity.ok(signInService.signIn(signInDto));
-        } catch (AuthenticationException e) {
+        } catch (AuthenticationException|UserNotFoundException e) {
             log.error("user {} failed to sign in", signInDto.getUsername());
-            return ResponseEntity.badRequest().build();
-        } catch (UserNotFoundException e) {
-            log.error("user {} not found", signInDto.getUsername());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        } 
 
     }
 

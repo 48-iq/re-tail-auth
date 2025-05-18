@@ -22,7 +22,7 @@ public class SignUpDto {
     private String username;
 
     @Schema(description = "User password", example = "asdfASDF1234!@#")
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")
+    @Pattern(regexp = "^.*(?=.{8,})(?=.*\\d)(?=.*[a-zA-Z])|(?=.{8,})(?=.*\\d)(?=.*[!@#$%^&])|(?=.{8,})(?=.*[a-zA-Z])(?=.*[!@#$%^&]).*$")
     private String password;
 
     @Pattern(regexp = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
@@ -34,18 +34,18 @@ public class SignUpDto {
     private String phone;
 
     @Schema(description = "User nickname which will be shown to other users", example = "my_nickname")
-    @Pattern(regexp = "^[a-zA-Z0-9.-]{1,32}$")
+    @Pattern(regexp = "^[a-zA-Z0-9._' -]{1,32}$")
     private String nickname;
 
     @Schema(description = "User name", example = "John")
-    @Pattern(regexp = "^[a-zA-Zа-яА-Я0-9.-]{1,64}$")
+    @Pattern(regexp = "^[a-zA-Zа-яА-Я0-9._' -]{1,64}$")
     private String name;
 
     @Schema(description = "User surname", example = "Doe")
-    @Pattern(regexp = "^[a-zA-Zа-яА-Я0-9.-]{1,64}$")
+    @Pattern(regexp = "^[a-zA-Zа-яА-Я0-9._' -]{1,64}$")
     private String surname;
 
-    @Schema(description = "User roles  ADMIN|USER", example = "[\"ADMIN\", \"USER\"]")
+    @Schema(description = "User roles  ROLE_ADMIN | ROLE_USER", example = "[\"ROLE_ADMIN\", \"ROLE_USER\"]")
     @NotEmpty
-    private List<@Pattern(regexp = "^ADMIN|USER$") String> roles;
+    private List<@Pattern(regexp = "^ROLE_ADMIN|ROLE_USER$") String> roles;
 }

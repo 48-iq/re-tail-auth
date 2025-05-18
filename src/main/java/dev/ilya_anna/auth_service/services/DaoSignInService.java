@@ -39,7 +39,9 @@ public class DaoSignInService implements SignInService {
         DaoUserDetails userDetails = (DaoUserDetails) authentication.getPrincipal();
         log.info("User {} signed in", userDetails.getUser().getUsername());
         //generate jwt
-        return new JwtDto(jwtService.generateRefresh(userDetails.getUser()),
-                jwtService.generateAccess(userDetails.getUser()));
+        return JwtDto.builder()
+            .refresh(jwtService.generateRefresh(userDetails.getUser()))
+            .access(jwtService.generateAccess(userDetails.getUser()))
+            .build();
     }
 }
