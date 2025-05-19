@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class ChangePasswordDto {
     @Schema(description = "New password (should contain at least one uppercase letter, " + 
         "one lowercase letter, one number and one special character)", example = "asdfASDF1234!@#")
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")
+    @Pattern(regexp = "^.*(?=.{8,})(?=.*\\d)(?=.*[a-zA-Z])|(?=.{8,})(?=.*\\d)(?=.*[!@#$%^&])|(?=.{8,})(?=.*[a-zA-Z])(?=.*[!@#$%^&]).*$")
     private String newPassword;
     @Schema(description = "Old password (actual account password)", example = "asdfASDF1234!@#")
     @NotBlank

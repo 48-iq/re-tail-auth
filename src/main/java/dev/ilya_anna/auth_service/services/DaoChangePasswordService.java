@@ -2,6 +2,7 @@ package dev.ilya_anna.auth_service.services;
 
 import dev.ilya_anna.auth_service.dto.ChangePasswordDto;
 import dev.ilya_anna.auth_service.entities.User;
+import dev.ilya_anna.auth_service.exceptions.UserNotFoundException;
 import dev.ilya_anna.auth_service.repositories.UserRepository;
 import dev.ilya_anna.auth_service.validators.DaoChangePasswordDtoValidator;
 import jakarta.validation.Valid;
@@ -42,11 +43,11 @@ public class DaoChangePasswordService implements ChangePasswordService {
 
         //get user and change password in database
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("user with id " + userId + " not found"));
+                () -> new UserNotFoundException("user with id " + userId + " not found"));
         user.setPassword(changePasswordDto.getNewPassword());
         userRepository.save(user);
 
         //sign out user after changing password
-        signOutService.signOut(userId);
+        signOutService.signOut(user);
     }
 }

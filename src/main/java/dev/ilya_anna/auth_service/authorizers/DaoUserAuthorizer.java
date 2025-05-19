@@ -6,7 +6,6 @@ import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.function.Supplier;
 
@@ -16,9 +15,12 @@ public class DaoUserAuthorizer implements AuthorizationManager<RequestAuthorizat
 
     @Override
     public AuthorizationDecision check(Supplier<Authentication> authenticationSupplier,
-                                       RequestAuthorizationContext authorizationContext) {;
+                                       RequestAuthorizationContext authorizationContext) {
+                                        
         
         Authentication authentication = authenticationSupplier.get();
+        if (authentication == null) return new AuthorizationDecision(false);
+        if (!authentication.isAuthenticated()) return new AuthorizationDecision(false);
         //get request sender
         DaoUserDetails userDetails = (DaoUserDetails) authentication.getPrincipal();
         //get user id from authorization context

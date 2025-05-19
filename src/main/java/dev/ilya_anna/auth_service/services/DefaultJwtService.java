@@ -43,6 +43,7 @@ public class DefaultJwtService implements JwtService{
         return JWT.create()
                 .withIssuer(issuer)
                 .withSubject(subject)
+                .withIssuedAt(ZonedDateTime.now().toInstant())
                 .withExpiresAt(ZonedDateTime.now().plusSeconds(refreshDuration).toInstant())
                 .withClaim("userId", user.getId())
                 .sign(Algorithm.HMAC256(refreshSecret));
@@ -59,6 +60,7 @@ public class DefaultJwtService implements JwtService{
         return JWT.create()
                 .withIssuer(issuer)
                 .withSubject(subject)
+                .withIssuedAt(ZonedDateTime.now().toInstant())
                 .withExpiresAt(ZonedDateTime.now().plusSeconds(accessDuration).toInstant())
                 .withClaim("userId", user.getId())
                 .withClaim("roles", user.getRoles().stream().map(Role::getName).toList())

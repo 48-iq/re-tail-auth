@@ -12,7 +12,10 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,6 +28,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+@Slf4j
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
@@ -74,10 +78,14 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (JWTVerificationException e) {
             response.getWriter().write("Invalid authorization JWT");
+            response.setStatus(HttpStatus.FORBIDDEN.value());
         } catch (UserNotFoundException e) {
             response.getWriter().write(e.getMessage());
+            log.info("in jwt filter: {}", e.getMessage());
+            response.setStatus(HttpStatus.NOT_FOUND.value());
         } catch (SignOutMarkValidationException e) {
             response.getWriter().write(e.getMessage());
+            response.setStatus(HttpStatus.FORBIDDEN.value());
         }
     }
 }

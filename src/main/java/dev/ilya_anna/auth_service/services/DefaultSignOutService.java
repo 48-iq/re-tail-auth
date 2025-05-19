@@ -3,6 +3,7 @@ package dev.ilya_anna.auth_service.services;
 import dev.ilya_anna.auth_service.entities.SignOutMark;
 import dev.ilya_anna.auth_service.entities.User;
 import dev.ilya_anna.auth_service.events.UserSignOutEvent;
+import dev.ilya_anna.auth_service.exceptions.SignOutMarkValidationException;
 import dev.ilya_anna.auth_service.exceptions.UserNotFoundException;
 import dev.ilya_anna.auth_service.producers.UserSignOutEventProducer;
 import dev.ilya_anna.auth_service.repositories.SignOutMarkRepository;
@@ -44,10 +45,11 @@ public class DefaultSignOutService implements SignOutService{
     public void validateSignOutMark(String userId, LocalDateTime time) {
         Optional<SignOutMark> signOutMarkOptional = signOutMarkRepository.findById(userId);
         if (signOutMarkOptional.isPresent()) {
+
             SignOutMark signOutMark = signOutMarkOptional.get();
             LocalDateTime signOutTime = signOutMark.getSignOutTime();
             if (signOutTime.isAfter(time)) {
-                throw new IllegalArgumentException("authentication expired");
+                throw new SignOutMarkValidationException("authentication expired");
             }
         }
     }
@@ -61,14 +63,9 @@ public class DefaultSignOutService implements SignOutService{
      * @throws UserNotFoundException if user with given username not found
      */
     @Override
-    public void signOut(String username) {
-
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new UserNotFoundException("User with username " + username + " not found")
-        );
-
+    public void signOut(User user) {
+        
         String userId = user.getId();
-
         //check if user is already signed out before
         if (signOutMarkRepository.existsById(userId)) {
             //delete mark for create new one

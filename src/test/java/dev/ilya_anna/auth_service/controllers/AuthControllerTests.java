@@ -305,6 +305,8 @@ public class AuthControllerTests {
             .statusCode(200);
         User user = userRepository.findByUsername("new_user").get();
         assertNotNull(user);
+        assertTrue(passwordEncoder.matches("new_UserPASSWORD#!", user.getPassword()));
+        assertTrue(user.getRoles().getFirst().getName().equals("ROLE_USER"));
     }
 
     @Test
@@ -341,5 +343,174 @@ public class AuthControllerTests {
                 testConsumer.clear();
             });
     }
+
+    @Test
+    void signUp_ReturnsConflict_WhenUserAlreadyExists() {
+        User user = User.builder()
+            .id(uuidService.generate())
+            .username("new_user")
+            .password(passwordEncoder.encode("new_UserPASSWORD#!"))
+            .roles(List.of(new Role("ROLE_USER")))
+            .build();
+        userRepository.save(user);
+        given()
+            .contentType(ContentType.JSON)
+            .when()
+            .body(Map.of(
+                "username", "new_user",
+                "password", "new_UserPASSWORD#!",
+                "email", "test@mail.ru",
+                "phone", "+79999999999",
+                "nickname", "new_user_nickname",
+                "name", "Jhon",
+                "surname", "Doe",
+                "roles", List.of("ROLE_USER")
+            ))
+            .post("/sign-up")
+            .then()
+            .log().body()
+            .statusCode(HttpStatus.CONFLICT.value());
+    }
+
+    @Test
+    void signOut_SaveSignOutMarkToDB_WhenUserSignsOut() {
+        log.info("signOut_SaveSignOutMarkToDB_WhenUserSignsOut");
+        User user = User.builder()
+            .id(uuidService.generate())
+            .username("test_username")
+            .password(passwordEncoder.encode("test_password"))
+            .roles(List.of(new Role("ROLE_USER")))
+            .build();
+
+        user = userRepository.save(user);
+
+        String accessJwt = jwtService.generateAccess(user);
+
+        given()
+            .contentType(ContentType.JSON)
+            .when()
+            .header("Authorization", "Bearer " + accessJwt)
+            .post("/sign-out")
+            .then()
+            .log().body()
+            .statusCode(200);
+
+        assertTrue(somRepository.count() > 0);
+    }
+
+    @Test
+    void signOut_ReturnsForbidden_WhenUserUseOldAccessJwt() {
+        log.info("signOut_ReturnsForbidden_WhenUserUseOldAccessJwt");
+        User user = User.builder()
+            .id(uuidService.generate())
+            .username("test_username")
+            .password(passwordEncoder.encode("test_PASSWORD#!"))
+            .roles(List.of(new Role("ROLE_USER")))
+            .build();
+        user = userRepository.save(user);
+
+        String accessJwt = jwtService.generateAccess(user);
+        
+        given()
+            .contentType(ContentType.JSON)
+            .when()
+            .header("Authorization", "Bearer " + accessJwt)
+            .post("/sign-out")
+            .then()
+            .log().body()
+            .statusCode(200);
+
+        
+        
+        given()
+            .contentType(ContentType.JSON)
+            .when()
+            .header("Authorization", "Bearer " + accessJwt)
+            .post("/sign-out")
+            .then()
+            .log().body()
+            .statusCode(HttpStatus.FORBIDDEN.value());
+    }
+
+    @Test
+    void refresh_ReturnsNewJwt_WhenRefreshJwtIsValid() {
+        log.info("refresh_ReturnsNewJwt_WhenRefreshJwtIsValid");
+        User user = User.builder()
+            .id(uuidService.generate())
+            .username("test_username")
+            .password(passwordEncoder.encode("test_PASSWORD#!"))
+            .roles(List.of(new Role("ROLE_USER")))
+            .build();
+        user = userRepository.save(user);
+
+        String accessJwt = jwtService.generateAccess(user);
+        String refreshJwt = jwtService.generateRefresh(user);
+
+        given()
+            .contentType(ContentType.JSON)
+            .when()
+            .header("Authorization", "Bearer " + accessJwt)
+            .body(Map.of(
+                "refresh", refreshJwt
+            ))
+            .post("/refresh")
+            .then()
+            .log().body()
+            .statusCode(200);
+    }
+
+    @Test
+    void refresh_ReturnsForbidden_WhenRefreshJwtIsInvalid() {
+        log.info("refresh_ReturnsForbidden_WhenRefreshJwtIsInvalid");
+        User user = User.builder()
+            .id(uuidService.generate())
+            .username("test_username")
+            .password(passwordEncoder.encode("test_PASSWORD#!"))
+            .roles(List.of(new Role("ROLE_USER")))
+            .build();
+        user = userRepository.save(user);
+
+        String accessJwt = jwtService.generateAccess(user);
+
+        given()
+            .contentType(ContentType.JSON)
+            .when()
+            .header("Authorization", "Bearer " + accessJwt)
+            .body(Map.of(
+                "refresh", "invalid_refresh_token"
+            ))
+            .post("/refresh")
+            .then()
+            .log().body()
+            .statusCode(HttpStatus.FORBIDDEN.value());
+    }
+
+    @Test
+    void changePassword_ReturnsOk_WhenDataIsValid() {
+        log.info("changePassword_ReturnsOk_WhenDataIsValid");
+        User user = User.builder()
+            .id(uuidService.generate())
+            .username("test_username")
+            .password(passwordEncoder.encode("test_PASSWORD#!"))
+            .roles(List.of(new Role("ROLE_USER")))
+            .build();
+        user = userRepository.save(user);
+        
+        String accessJwt = jwtService.generateAccess(user);
+
+        given()
+            .contentType(ContentType.JSON)
+            .when()
+            .header("Authorization", "Bearer " + accessJwt)
+            .body(Map.of(
+                "oldPassword", "test_PASSWORD#!",
+                "newPassword", "new_PASSWORD#!"
+            ))
+            .post("/change-password/" + user.getId())
+            .then()
+            .log().body()
+            .statusCode(200);
+    }
+    
     
 }
